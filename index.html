@@ -1,0 +1,855 @@
+<html xmlns="http://www.w3.org/1999/xhtml" class="gr__localhost"><head>
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=1000">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- <link rel="icon" href="http://autobot27.local/images/favicon.ico"> -->
+  
+    <title>Joy mission control</title>
+  
+    <!-- Bootstrap v3.3.1 by getbootstrap.com -->
+    <link href="http://autobot27.local/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="http://autobot27.local/css/bootstrap-toggle.min.css" rel="stylesheet" type="text/css">
+    <link href="http://autobot27.local/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+    <link href="http://autobot27.local/css/bootstrap-callout.css" rel="stylesheet" type="text/css">
+  
+    <!-- FontAwesome v4.7 by fontawesome.io -->
+    <!-- <link rel="stylesheet" href="http://autobot27.local/css/font-awesome/css/font-awesome.min.css"> -->
+  
+    <!-- Utility CSS -->
+    <link href="http://autobot27.local/css/sticky-footer-navbar.css" rel="stylesheet" media="all">
+  
+    <!-- Custom CSS -->
+    <link href="http://autobot27.local/css/compose.css" rel="stylesheet" media="all">
+  
+  
+    <!-- JQuery v1.11.1 by Google -->
+    <script src="http://autobot27.local/js/jquery.1.11.1.min.js"></script>
+  
+    <!-- ChartJS v2.7.0 by chartjs.org  -->
+    <script src="http://autobot27.local/js/Chart.min.js"></script><style type="text/css">/* Chart.js */
+  @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style>
+  
+    <!-- Custom JS -->
+    <script src="http://autobot27.local/js/compose.js"></script>
+  
+    <!-- Utility JS -->
+    <script src="http://autobot27.local/js/md5.js"></script>
+    <script src="http://autobot27.local/js/hmac-sha256.js"></script>
+    <script src="http://autobot27.local/js/enc-base64-min.js"></script>
+    <script src="http://autobot27.local/js/string.format.js"></script>
+  
+    <!-- Google API Library -->
+    <script src="https://apis.google.com/js/platform.js" async="" defer="" gapi_processed="true"></script>
+        <meta name="google-signin-client_id" content="NULL">
+      
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="joy.js"></script>
+  </head>
+  
+  <body data-gr-c-s-loaded="true" style="background-image: none;">
+  
+      <div id="joyDiv" style="width:50%;margin-left: auto;margin-right: 10%;margin-top: 70%;margin-bottom: auto;">
+        <canvas id="joystick" width="201px" height="200"></canvas>
+      </div>
+
+      <script type="text/javascript">
+      var w = $("#joyDiv").width()
+      $("#joyDiv").css("height", w);
+      </script>
+
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+      <input type="hidden" id="posizioneX" type="text"><br>
+      <input type="hidden" id="posizioneY" type="text"><br>
+      <input type="hidden" id="direzione" type="text"><br>
+      <input type="hidden" id="X" type="text"><br>
+      <input type="hidden" id="Y" type="text">
+    <!-- Load JS Configuration class -->
+    
+  <script type="text/javascript">
+    var Configuration = (function () {
+      var __data;
+  
+      function createInstance() {
+        return {
+          "/core/TIMEZONE": "","/core/GMT": "","/core/DEBUG": "","/core/BASE_URL": "http://autobot27.local/","/core/HOSTNAME": "autobot27.local","/core/BASE": "http://autobot27.local/","/core/PAGE": "mission-control","/core/ACTION": "","/core/ARG1": "","/core/ARG2": "","/core/TOKEN": "OoqXSVV7uoGgyRhF","/core/IS_MOBILE": "","/core/CACHE_SYSTEM": "apcu","/core/WEBAPI_VERSION": "1.0","/core/ASSETS_STORE_URL": "https://raw.githubusercontent.com/afdaniele/compose-assets-store/","/core/ASSETS_STORE_BRANCH": "v2",      };
+      }
+  
+      return {
+        as_array: function () {
+          if (!__data) {
+            __data = createInstance();
+          }
+          return __data;
+        },
+        get: function (pack, key, default_val) {
+          if (!__data) {
+            __data = createInstance();
+          }
+          key = "/{0}/{1}".format(pack, key);
+          if (default_val == undefined && __data[key] == undefined) {
+            throw "Key {0} not found!".format(key);
+          }
+          if (__data[key] == undefined) {
+            return default_val;
+          }
+          return __data[key];
+        },
+        set: function (pack, key, value) {
+          if (!__data) {
+            __data = createInstance();
+          }
+          key = "/{0}/{1}".format(pack, key);
+          __data[key] = value;
+        }
+      };
+    })();
+  </script>
+  
+  <script type="text/javascript">
+  
+        $(window).on('COMPOSE_LOGGED_OUT', function(evt){
+        window.location.href = '<?php echo Configuration:: ?>';    });
+      
+    function logOutButtonClick(){
+      userLogOut(
+        'http://autobot27.local/',
+        '1.0',
+        'OoqXSVV7uoGgyRhF',
+        function(){ /* successFcn: on success function */
+          $(window).trigger('COMPOSE_LOGGED_OUT');
+        }
+      );
+    }//logOutButtonClick
+  
+    function onGoogleLoginError(error){
+      if (error.hasOwnProperty('error') && error.error == 'popup_closed_by_user')
+        return;
+      var msg = "An error occurred while authenticating with Google. The server returns: '{0}'.";
+      msg += "<br/>Make sure the hostname <strong>{1}</strong> is whitelisted on";
+      msg += " <a href=\"https://console.developers.google.com/\">https://console.developers.google.com/</a>"
+      msg += " for your project's client ID."
+      msg = msg.format(JSON.stringify(error), "autobot27.local");
+      openAlert('danger', msg);
+    }//onGoogleLoginError
+  
+    function renderGoogleLoginButton() {
+      gapi.auth2.init();
+      if ($("#g-signin").length) {
+        gapi.signin2.render('g-signin', {
+          'scope': 'profile email',
+          'width': 240,
+          'height': 50,
+          'longtitle': true,
+          'onsuccess': function(user){$(window).trigger("GOOGLE_LOGGED_IN", [user])},
+          'onfailure': onGoogleLoginError
+        });
+      }
+    }//renderGoogleLoginButton
+  
+    $(document).on('ready', function(){
+            $("#g-signin").html('Login with Google is not configured yet');
+        });
+  
+  </script>
+  
+  <style type="text/css">
+    .updates_helper{
+      font-weight: bold;
+      position: fixed;
+      top: 64px;
+      right: 10px;
+      text-align: center;
+      background-color: #e38d13dd;
+      background-image: none;
+      z-index: 900;
+    }
+  </style>
+  
+  <a role="button" id="_updates_helper_btn" class="btn btn-warning updates_helper" style="display: none" href="http://autobot27.local/settings?check_updates=1#sel:codebase_collapse">
+    <i class="fa fa-cloud-download" aria-hidden="true"></i>
+    Updates available
+  </a>
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+      function on_success_fcn(needs_update){
+        if (needs_update) {
+          $('#_updates_helper_btn').css('display', 'block');
+        }
+      }//on_success_fcn
+  
+      checkForUpdates(
+        "github.com",
+        "afdaniele",
+        "compose",
+        "422267e3b944ebb859ed73a38fdf5d86830a78dc",
+        false,
+        on_success_fcn
+      );
+    });
+  </script>
+  
+    <!-- Begin page content -->
+    <div id="page_container" class="container">
+  
+      
+  
+  <div style="display:none" id="page_alert_container">
+    <br>
+  
+    <div class="alert alert-dismissible" role="alert" id="page_alert_object">
+      <button type="button" class="close" onclick="closeAlert();"><span aria-hidden="true">×</span><span class="sr-only">Chiudi</span></button>
+      <div id="page_alert_content">
+  
+      </div>
+    </div>
+  </div>
+  
+      <br>
+  
+      <!-- Main Container -->
+      <div id="page_canvas">
+        
+  <script src="http://autobot27.local//js/jquery-ui-1.11.1.js"></script>
+  <script src="http://autobot27.local//js/packery.pkgd.min.js"></script>
+  <script src="http://autobot27.local//js/draggabilly.pkgd.min.js"></script>
+  
+      <script type="text/javascript">
+  
+        function mission_control_get_blocks_json(){
+          // get blocks order
+          var blocks = $("#vehicle-mission-control-grid").packery('getItemElements');
+          // turn each block into a JSON string
+          var blocks_json = [];
+          $.each(blocks, function(_, block){
+            blocks_json.push(mission_control_serialize_block(block.id));
+          });
+          // ---
+          return blocks_json;
+        }//mission_control_get_blocks_json
+  
+        function mission_control_save_confirm_fcn(mission_name){
+          var blocks_json = mission_control_get_blocks_json();
+          // compile blocks into a single JSON string
+          var mission_str = '{"blocks": [{0}]}'.format(
+            blocks_json.join(',')
+          );
+          // trigger save event
+          $(window).trigger('MISSION_CONTROL_MENU_SAVE', [mission_name, mission_str]);
+        }//mission_control_save_confirm_fcn
+  
+        function mission_control_save_as_fcn(){
+          var mission_name = prompt("Name of the new mission", "");
+          if (mission_name != null) {
+            mission_control_save_confirm_fcn(mission_name);
+          }
+        }//mission_control_save_as_fcn
+  
+        function mission_control_new_mission_fcn(){
+          var mission_name = prompt("Name of the new mission", "");
+          if (mission_name != null) {
+            var empty_mission = '{"blocks": []}';
+            // trigger save event
+            $(window).trigger('MISSION_CONTROL_MENU_SAVE', [mission_name, empty_mission]);
+          }
+        }//mission_control_new_mission_fcn
+  
+        function mission_control_load_fcn(mission_name){
+          // trigger load event
+          $(window).trigger('MISSION_CONTROL_MENU_LOAD', [mission_name]);
+          // close modal
+          $('#mission-control-load-modal').modal('hide');
+        }//mission_control_load_fcn
+  
+        function mission_control_save_fcn(){
+          var question = "Are you sure you want to save?";
+          openYesNoModal(
+            question,
+            function(){
+              mission_control_save_confirm_fcn("default")
+            },
+            false
+          );
+        }//mission_control_save_fcn
+  
+        function mission_control_delete_confirm_fcn(mission_name){
+          // trigger delete event
+          $(window).trigger('MISSION_CONTROL_MENU_DELETE', [mission_name]);
+        }//mission_control_delete_confirm_fcn
+  
+        function mission_control_delete_fcn(mission_name){
+          var question = "Are you sure you want to save?";
+          openYesNoModal(
+            question,
+            function(){
+              mission_control_delete_confirm_fcn(mission_name)
+            },
+            false
+          );
+        }//mission_control_delete_fcn
+  
+        function mission_control_add_block_fcn(mission_name, block_json_b64){
+          var new_block_json = CryptoJS.enc.Base64.parse(block_json_b64).toString(CryptoJS.enc.Utf8);
+          // get mission blocks json
+          var blocks_json = mission_control_get_blocks_json();
+          blocks_json.push(new_block_json);
+          // compile blocks into a single JSON string
+          var mission_str = '{"blocks": [{0}]}'.format(
+            blocks_json.join(',')
+          );
+          // trigger save event
+          $(window).trigger('MISSION_CONTROL_MENU_SAVE', [mission_name, mission_str]);
+        }//mission_control_add_block_fcn
+  
+                $(window).on('MISSION_CONTROL_SAVE', function(grid_id){
+            mission_control_save_confirm_fcn("default");
+          });
+          
+        function mission_control_center_toolbox() {
+          var side_menu = $('#mission-control-side-menu');
+          var offset = ($(window).height() - side_menu.height()) / 2;
+          offset = Math.max(90, offset);
+          side_menu.css("top", offset);
+        }//mission_control_center_toolbox
+  
+        $(window).on("resize", mission_control_center_toolbox);
+        $(document).on("ready", mission_control_center_toolbox);
+  
+      </script>
+          <div class="modal fade" id="mission-control-load-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+              <h4 class="modal-title">Load Mission</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <tbody><tr>
+                  <td class="col-md-1 text-center text-bold">#</td>
+                  <td class="col-md-7 text-bold">Name</td>
+                  <td class="col-md-4 text-center text-bold">Actions</td>
+                </tr>
+                                <tr>
+                    <td class="text-center">1</td>
+                    <td>calibration</td>
+                    <td class="text-center">
+                      <a class="btn btn-default btn-xs" onclick="mission_control_load_fcn('calibration')" role="button">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                        Open
+                      </a>
+                      &nbsp; | &nbsp;
+                      <a class="btn btn-danger btn-xs" role="button" onclick="mission_control_delete_fcn('calibration')">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        Delete
+                      </a>
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td class="text-center">2</td>
+                    <td>default</td>
+                    <td class="text-center">
+                      <a class="btn btn-default btn-xs" onclick="mission_control_load_fcn('default')" role="button">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                        Open
+                      </a>
+                      &nbsp; | &nbsp;
+                      <a class="btn btn-danger btn-xs" role="button" onclick="mission_control_delete_fcn('default')">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        Delete
+                      </a>
+                    </td>
+                  </tr>
+                              </tbody></table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+          <div class="modal fade" id="mission-control-add-block-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+              <h4 class="modal-title">Add Block</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <tbody><tr>
+                  <td class="col-md-1 text-center text-bold">#</td>
+                  <td class="col-md-7 text-bold">Name</td>
+                  <td class="col-md-4 text-center text-bold">Actions</td>
+                </tr>
+                                <tr>
+                    <td class="text-center">1</td>
+                    <td>DuckietownMsgs_AprilTagsWithInfos</td>
+                    <td class="text-center">
+                      <a class="btn btn-default btn-xs" onclick="mission_control_add_block_fcn('default', 'CiAgICAgIHsKICAgICAgICAic2hhcGUiOiB7InJvd3MiOjIsImNvbHMiOjJ9LAogICAgICAgICJyZW5kZXJlciI6ICJEdWNraWV0b3duTXNnc19BcHJpbFRhZ3NXaXRoSW5mb3MiLAogICAgICAgICJ0aXRsZSI6ICJOZXcgRHVja2lldG93bk1zZ3NfQXByaWxUYWdzV2l0aEluZm9zIGJsb2NrLi4uIiwKICAgICAgICAic3VidGl0bGUiOiAiTmV3IER1Y2tpZXRvd25Nc2dzX0FwcmlsVGFnc1dpdGhJbmZvcyBibG9jayBzdWJ0aXRsZS4iLAogICAgICAgICJhcmdzIjogeyJ0b3BpYyI6bnVsbCwiZnBzIjo1fQogICAgICB9CiAgICAgIA==')" role="button">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add
+                      </a>
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td class="text-center">2</td>
+                    <td>DuckietownMsgs_Twist2DStamped</td>
+                    <td class="text-center">
+                      <a class="btn btn-default btn-xs" onclick="mission_control_add_block_fcn('default', 'CiAgICAgIHsKICAgICAgICAic2hhcGUiOiB7InJvd3MiOjIsImNvbHMiOjJ9LAogICAgICAgICJyZW5kZXJlciI6ICJEdWNraWV0b3duTXNnc19Ud2lzdDJEU3RhbXBlZCIsCiAgICAgICAgInRpdGxlIjogIk5ldyBEdWNraWV0b3duTXNnc19Ud2lzdDJEU3RhbXBlZCBibG9jay4uLiIsCiAgICAgICAgInN1YnRpdGxlIjogIk5ldyBEdWNraWV0b3duTXNnc19Ud2lzdDJEU3RhbXBlZCBibG9jayBzdWJ0aXRsZS4iLAogICAgICAgICJhcmdzIjogeyJ0b3BpYyI6bnVsbCwiZnBzIjo1LCJtYXhfdmFsdWUiOm51bGwsImFsbG93X25lZ2F0aXZlIjp0cnVlLCJ1bml0IjpudWxsLCJmaWVsZCI6bnVsbH0KICAgICAgfQogICAgICA=')" role="button">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add
+                      </a>
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td class="text-center">3</td>
+                    <td>DuckietownMsgs_WheelsCmdStamped</td>
+                    <td class="text-center">
+                      <a class="btn btn-default btn-xs" onclick="mission_control_add_block_fcn('default', 'CiAgICAgIHsKICAgICAgICAic2hhcGUiOiB7InJvd3MiOjIsImNvbHMiOjJ9LAogICAgICAgICJyZW5kZXJlciI6ICJEdWNraWV0b3duTXNnc19XaGVlbHNDbWRTdGFtcGVkIiwKICAgICAgICAidGl0bGUiOiAiTmV3IER1Y2tpZXRvd25Nc2dzX1doZWVsc0NtZFN0YW1wZWQgYmxvY2suLi4iLAogICAgICAgICJzdWJ0aXRsZSI6ICJOZXcgRHVja2lldG93bk1zZ3NfV2hlZWxzQ21kU3RhbXBlZCBibG9jayBzdWJ0aXRsZS4iLAogICAgICAgICJhcmdzIjogeyJ0b3BpYyI6bnVsbCwiZnBzIjo1LCJtYXhfdmFsdWUiOm51bGx9CiAgICAgIH0KICAgICAg')" role="button">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add
+                      </a>
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td class="text-center">4</td>
+                    <td>Duckiebot_Calibration</td>
+                    <td class="text-center">
+                      <a class="btn btn-default btn-xs" onclick="mission_control_add_block_fcn('default', 'CiAgICAgIHsKICAgICAgICAic2hhcGUiOiB7InJvd3MiOjIsImNvbHMiOjJ9LAogICAgICAgICJyZW5kZXJlciI6ICJEdWNraWVib3RfQ2FsaWJyYXRpb24iLAogICAgICAgICJ0aXRsZSI6ICJOZXcgRHVja2llYm90X0NhbGlicmF0aW9uIGJsb2NrLi4uIiwKICAgICAgICAic3VidGl0bGUiOiAiTmV3IER1Y2tpZWJvdF9DYWxpYnJhdGlvbiBibG9jayBzdWJ0aXRsZS4iLAogICAgICAgICJhcmdzIjogeyJzZXJ2aWNlIjpudWxsLCJ0cmltX3BhcmFtIjpudWxsLCJ0b3BpYyI6bnVsbCwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmYifQogICAgICB9CiAgICAgIA==')" role="button">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add
+                      </a>
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td class="text-center">5</td>
+                    <td>SensorMsgs_CompressedImage</td>
+                    <td class="text-center">
+                      <a class="btn btn-default btn-xs" onclick="mission_control_add_block_fcn('default', 'CiAgICAgIHsKICAgICAgICAic2hhcGUiOiB7InJvd3MiOjIsImNvbHMiOjJ9LAogICAgICAgICJyZW5kZXJlciI6ICJTZW5zb3JNc2dzX0NvbXByZXNzZWRJbWFnZSIsCiAgICAgICAgInRpdGxlIjogIk5ldyBTZW5zb3JNc2dzX0NvbXByZXNzZWRJbWFnZSBibG9jay4uLiIsCiAgICAgICAgInN1YnRpdGxlIjogIk5ldyBTZW5zb3JNc2dzX0NvbXByZXNzZWRJbWFnZSBibG9jayBzdWJ0aXRsZS4iLAogICAgICAgICJhcmdzIjogeyJ0b3BpYyI6bnVsbCwiZnBzIjo1LCJwb3NpdGlvbiI6ImNlbnRlciBjZW50ZXIiLCJzdHlsZSI6ImNvdmVyIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmYifQogICAgICB9CiAgICAgIA==')" role="button">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add
+                      </a>
+                    </td>
+                  </tr>
+                              </tbody></table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+      
+  <div style="width:100%; margin:auto">
+            
+  <script type="text/javascript">
+  
+    // define the list of keys that can be used to drive the vehicle
+    window.mission_control_Keys = {
+      SPACE: 32,
+      UP_ARROW: 38,
+      LEFT_ARROW: 37,
+      DOWN_ARROW: 40,
+      RIGHT_ARROW: 39,
+      W: 87,
+      A: 65,
+      S: 83,
+      D: 68,
+    };
+  
+    // define buffer of pressed keys
+    window.mission_control_keyMap = {};
+    // set all the keys to False (i.e., not-pressed)
+    for (let item in window.mission_control_Keys) {
+      if (isNaN(Number(item))) {
+        window.mission_control_keyMap[window.mission_control_Keys[item]] = false;
+      }
+    }
+  
+    // capture keyboard events (and update buffer accordingly)
+    function key_cb(e){
+      if (window.mission_control_Mode != 'manual')
+        return;
+      // space and arrow keys
+      if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        // console.log("receiving code" + e.keyCode)
+        e.preventDefault();
+        window.mission_control_keyMap[e.keyCode] = e.type == "keydown";
+      }
+    }//key_cb
+  
+    // jasonhu5
+    var joy = new JoyStick('joyDiv');
+    
+    var inputPosX = document.getElementById("posizioneX");
+    var inputPosY = document.getElementById("posizioneY");
+    var direzione = document.getElementById("direzione");
+    var x = document.getElementById("X");
+    var y = document.getElementById("Y");
+  
+    var UP_ARROW = 38
+    var LEFT_ARROW = 37
+    var DOWN_ARROW = 40
+    var RIGHT_ARROW = 39
+    var arrows = [
+      [false, RIGHT_ARROW], 
+      [false, LEFT_ARROW],
+      [false, UP_ARROW], 
+      [false, DOWN_ARROW]
+    ]
+    var _thres = 50
+    
+    setInterval(function(){ inputPosX.value=joy.GetPosX(); }, 50);
+    setInterval(function(){ inputPosY.value=joy.GetPosY(); }, 50);
+    setInterval(function(){ direzione.value=joy.GetDir(); }, 50);
+    setInterval(function(){ x.value=joy.GetX(); }, 50);
+    setInterval(function(){ y.value=joy.GetY(); }, 50);
+    setInterval(() => {
+      window.mission_control_Mode = 'manual';
+
+      arrows[0][0] = x.value > _thres;
+      arrows[1][0] = x.value < -_thres
+      arrows[2][0] = y.value > _thres
+      arrows[3][0] = y.value < -_thres
+
+      if (arrows[3][0]) {
+        tmp = arrows[0][0]
+        arrows[0][0] = arrows[1][0]
+        arrows[1][0] = tmp
+      }
+
+      for (var itr = 0; itr < 4; itr++) {
+        if (arrows[itr][0]) {
+          var event = new KeyboardEvent("keydown", {bubbles : true, cancelable : true, keyCode : arrows[itr][1]});
+          window.dispatchEvent(event);
+        } else {
+          var event = new KeyboardEvent("keyup", {bubbles : true, cancelable : true, keyCode: arrows[itr][1]});
+          window.dispatchEvent(event);
+        }
+      }
+    }, 50);
+
+    // define the callback function that turns the key_map into a ROS message
+    function publish_command(){
+      if (window.mission_control_Mode != 'manual')
+        return;
+      if (window.mission_control_cmdVel == undefined)
+        return;
+      keys = window.mission_control_Keys;
+      key_map = window.mission_control_keyMap;
+      // compute linear/angular speeds
+      v_gain = 0.5;
+      omega_gain = 4.15;
+      v_val = Math.min(key_map[keys.UP_ARROW] + key_map[keys.W], 1) - Math.min(key_map[keys.DOWN_ARROW] + key_map[keys.S], 1);
+      omega_val = Math.min(key_map[keys.LEFT_ARROW] + key_map[keys.A], 1) - Math.min(key_map[keys.RIGHT_ARROW] + key_map[keys.D], 1);
+      // create a message
+      var car_cmd = new ROSLIB.Message({
+        v : v_val * v_gain,
+        omega : omega_val * omega_gain
+      });
+      // publish message
+      window.mission_control_cmdVel.publish(car_cmd);
+    }//publish_command
+  
+    // publish command at regular rate
+    $(document).on('ROSBRIDGE_CONNECTED', function(e){
+      // define the output topic
+      window.mission_control_cmdVel = new ROSLIB.Topic({
+        ros : window.ros,
+        name : '/autobot27/joy_mapper_node/car_cmd',
+        messageType : 'duckietown_msgs/Twist2DStamped',
+        queue_size : 1
+      });
+      // attach listeners to key events
+      window.addEventListener("keyup", key_cb, false);
+      window.addEventListener("keydown", key_cb, false);
+  
+      // start publishing commands to the vehicle
+      setInterval(publish_command, 100);
+    });
+  
+    $(document).ready(function() {
+      window.mission_control_Mode = 'autonomous';
+    });
+  
+  </script>
+  
+      <script type="text/javascript">
+        $(document).ready(function() {
+          // create grid
+          var grid = $('#vehicle-mission-control-grid').packery({
+            itemSelector: '.mission-control-item',
+            columnWidth: 112,
+            gutter: 10        });
+  
+          // make all grid-items draggable
+          grid.find('.mission-control-item').each( function( i, gridItem ) {
+            var draggie = new Draggabilly( gridItem );
+            // bind drag events to Packery
+            grid.packery( 'bindDraggabillyEvents', draggie );
+          });
+        });
+  
+        function mission_control_switch_shape(box_id, new_rows, new_cols){
+          // get box
+          var box = $('#'+box_id);
+          // remove previous class
+          box.removeClass( function(_, classes){
+            classes_to_remove = (classes.match(/\s*mission-control-item-r([0-9]+)-c([0-9]+)\s*/g) || []).join(' ');
+            return classes_to_remove;
+          } );
+          // add new class
+          box.addClass("mission-control-item-r{0}-c{1}".format(new_rows, new_cols));
+          // update block data
+          var new_shape = {'rows': new_rows, 'cols': new_cols};
+          box.data(
+            'shape',
+            CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(JSON.stringify(new_shape)))
+          );
+          // update the grid
+          box.closest('.mission-control-grid').packery();
+        }//mission_control_switch_shape
+  
+        function mission_control_dispose_block( block_id ){
+          var grid = $('#vehicle-mission-control-grid');
+          var block = $('#{0}'.format(block_id));
+          grid.packery('remove', block).packery();
+          // highlight the Save button in the menu
+          $('#mission-control-side-menu-save-button').removeClass('btn-default');
+          $('#mission-control-side-menu-save-button').addClass('btn-warning');
+        }//mission_control_dispose_block
+  
+        function mission_control_serialize_block(box_id){
+          // get box
+          var box = $('#'+box_id);
+          // create JSON string
+          var json_str = `
+          {
+            "shape": {0},
+            "renderer": "{1}",
+            "title": "{2}",
+            "subtitle": "{3}",
+            "args": {4}
+          }
+          `.format(
+            CryptoJS.enc.Base64.parse(box.data('shape')).toString(CryptoJS.enc.Utf8),
+            box.data('renderer'),
+            CryptoJS.enc.Base64.parse(box.data('title')).toString(CryptoJS.enc.Utf8),
+            CryptoJS.enc.Base64.parse(box.data('subtitle')).toString(CryptoJS.enc.Utf8),
+            CryptoJS.enc.Base64.parse(box.data('properties')).toString(CryptoJS.enc.Utf8)
+          );
+          return json_str;
+        }
+      </script>
+  
+        <script type="text/javascript" src="http://autobot27.local//js.php?package=ros&amp;script=roslibjs.min.js"></script>
+  
+        <script type="text/javascript">
+        $(document).ready(function() {
+          // Connect to ROS
+          window.ros = new ROSLIB.Ros({
+            url : 'ws://autobot27.local:9001'
+          });
+          ros.on('connection', function() {
+            $(document).trigger('ROSBRIDGE_CONNECTED');
+          });
+          ros.on('error', function(error) {
+            $(document).trigger('ROSBRIDGE_ERROR', [error]);
+          });
+          ros.on('close', function() {
+            $(document).trigger('ROSBRIDGE_CLOSED');
+          });
+        });
+        </script>
+        
+  </div>
+  
+  
+  <script type="text/javascript">
+    $(document).on('ROSBRIDGE_CONNECTED', function(evt){
+      console.log('Connected to websocket server.');
+      $('#vehicle_bridge_status').html(
+        '<span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:green"></span> Bridge: <strong>Connected</strong>'
+      );
+    });
+  
+    $(document).on('ROSBRIDGE_ERROR', function(evt, error){
+      console.log('Error connecting to websocket server: ', error);
+      $('#vehicle_bridge_status').html(
+        '<span class="glyphicon glyphicon-remove-sign" aria-hidden="true" style="color:red"></span> Bridge: <strong>Error</strong>'
+      );
+    });
+  
+    $(document).on('ROSBRIDGE_CLOSED', function(evt){
+      console.log('Connection to websocket server closed.');
+      $('#vehicle_bridge_status').html(
+        '<span class="glyphicon glyphicon-off" aria-hidden="true" style="color:red"></span> Bridge: <strong>Closed</strong>'
+      );
+    });
+  
+    $(document).ready(function() {
+      window.mission_control_page_blocks_data = {};
+    });
+  
+    $(window).on('MISSION_CONTROL_MENU_LOAD', function(evt, mission_name){
+      var url = "http://autobot27.local/mission-control?mission={0}".format(mission_name);
+      window.location = url;
+    });
+  
+  </script>
+      </div>
+      <!-- Main Container End -->
+  
+      <br>
+  
+    </div>
+  
+    <div class="modal fade modal-vertical-centered" id="pleaseWaitModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 style="margin:0 4px 0 4px">Loading...</h4>
+        </div>
+        <div class="modal-body">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="margin-bottom:0; width:100%">
+            </div>
+          </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal fade modal-vertical-centered" id="successDialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 style="margin:0 4px 0 4px"><span class="glyphicon glyphicon-ok" aria-hidden="true" style="color:green"></span> Done!</h4>
+        </div>
+        <div class="modal-body">
+          <div class="progress">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="margin-bottom:0; width:100%">
+            </div>
+          </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal fade modal-vertical-centered" id="yes-no-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+          <h4 style="margin:0 4px 0 4px"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Confirm?</h4>
+        </div>
+  
+        <div class="modal-body">
+          <p style="width:100%" id="question-p"></p>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-success" id="yes-button">Yes</button>
+        </div>
+  
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  
+  
+  
+  <script type="text/javascript">
+  
+    var configured = false;
+    var yesNoSize = 'sm';
+    var yesfunction = null;
+    var showPleaseWaitModal = true;
+  
+    $('#yes-no-modal').on('show.bs.modal', function(e){
+      if( !configured ){
+        // set size
+        $('#yes-no-modal .modal-dialog').addClass('modal-'+yesNoSize);
+        // set question
+        var question = $(e.relatedTarget).data('question');
+        $('#yes-no-modal #question-p').html( question );
+        //
+        var url = $(e.relatedTarget).data('url');
+        $('#yes-no-modal #yes-button').data( 'url', url );
+        //
+        configured = true;
+      }
+    });
+  
+  
+    $('#yes-no-modal #yes-button').on('click', function(){
+      $('#yes-no-modal').modal('hide');
+      if(showPleaseWaitModal){showPleaseWait()};
+      if( yesfunction != null ){
+        yesfunction();
+        if(showPleaseWaitModal){hidePleaseWait()};
+      }else{
+        var url = $('#yes-no-modal #yes-button').data('url');
+        //
+        $.ajax({type: 'GET', url:url, dataType: 'json', success:function( result ){
+          if( result.code == 200 ){
+            if(showPleaseWaitModal){hidePleaseWait()};
+            showSuccessDialog( 2000, function(){
+              window.location.reload(true);
+            } );
+          }else{
+            // error, open an alert
+            openAlert( 'danger', result.message );
+            if(showPleaseWaitModal){hidePleaseWait()};
+          }
+        }, error:function(){
+          // error
+          openAlert('danger', 'An error occurred while communicating with the server. Please, try again!');
+          if(showPleaseWaitModal){hidePleaseWait()};
+        }});
+      }
+    });
+  
+    function openYesNoModal(question, yes_fcn, silentMode, size) {
+      $('#yes-no-modal #question-p').html( question );
+      size = (size == undefined)? 'sm' : size;
+      yesfunction = yes_fcn;
+      showPleaseWaitModal = !silentMode;
+      yesNoSize = size;
+      //
+      configured = true;
+      //
+      $('#yes-no-modal').modal('show');
+    }//openYesNoModal
+  
+  </script>
+  
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://autobot27.local/js/bootstrap.min.js"></script>
+    <script src="http://autobot27.local/js/bootstrap-toggle.min.js"></script>
+  
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://autobot27.local/js/ie10-viewport-bug-workaround.js"></script>
+  
+    <script type="text/javascript">
+      // configure button groups
+      $(".btn-group > .btn").click(function() {
+        $(this).addClass("active").siblings().removeClass("active");
+      });
+    </script>
+  
+  
+  
+  
+  </body></html>
