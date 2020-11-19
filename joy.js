@@ -71,7 +71,7 @@ var JoyStick = (function(container, parameters) {
 	var pressed = 0; // Bool - 1=Yes - 0=No
 	var circumference = 2 * Math.PI;
     var internalRadius = canvas.width * 0.25;
-    console.log(internalRadius)
+    // console.log(internalRadius)
 	var maxMoveStick = internalRadius * 1.1;
 	var externalRadius = internalRadius * 1.6;
 	var centerX = canvas.width / 2;
@@ -318,7 +318,7 @@ var JoyStick = (function(container, parameters) {
 		{
 			if(result=="C")
 			{ 
-				result = "W";
+				result = "E";
 			}
 			else
 			{
