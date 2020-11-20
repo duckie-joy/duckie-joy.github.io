@@ -35,10 +35,12 @@
 
             ros.on('connection', function () {
                 console.log('Connected to websocket server.');
+                alert("Success: connected to ROS websocket");
             });
 
             ros.on('error', function (error) {
                 console.log('Error connecting to websocket server: ', error);
+                alert("Error: cannot connect to ROS websocket");
             });
 
             ros.on('close', function () {
@@ -158,6 +160,8 @@
                 // console.log(curr_dir);
             });
 
+            pub_joy_cmd("C");
+
             // Subscribing to a Topic
             // ----------------------
 
@@ -186,55 +190,15 @@
                 subscriber.subscribe(function (message) {
                     base64_string = 'data:image/jpg;base64,' + message['data'];
                     // $('body').css('backgroundImage','url('+base64_string+')');
-                    $('#image_view').css('backgroundImage', 'url(' + base64_string + ')');
+                    $('#image_view').css('background-image', 'url(' + base64_string + ')');
                 });
             });
-
-            // Calling a service
-            // -----------------
-
-            // var addTwoIntsClient = new ROSLIB.Service({
-            //     ros: ros,
-            //     name: '/add_two_ints',
-            //     serviceType: 'rospy_tutorials/AddTwoInts'
-            // });
-
-            // var request = new ROSLIB.ServiceRequest({
-            //     a: 1,
-            //     b: 2
-            // });
-
-            // addTwoIntsClient.callService(request, function (result) {
-            //     console.log('Result for service call on '
-            //         + addTwoIntsClient.name
-            //         + ': '
-            //         + result.sum);
-            // });
-
-            // // Getting and setting a param value
-            // // ---------------------------------
-
-            // ros.getParams(function (params) {
-            //     console.log(params);
-            // });
-
-            // var maxVelX = new ROSLIB.Param({
-            //     ros: ros,
-            //     name: 'max_vel_y'
-            // });
-
-            // maxVelX.set(0.8);
-            // maxVelX.get(function (value) {
-            //     console.log('MAX VAL: ' + value);
-            // });
         });
     </script>
 </head>
 
 <body>
-    <div id="image_view" style="width: 100%; height: 480px; background-size: contain; background-repeat: no-repeat;">
-    </div>
-    <!-- <div id="joyDiv" style="width:50%;margin-left: auto;margin-right: 10%;margin-top: 70%;margin-bottom: auto;"> -->
+    <div id="image_view" style="width: 100%; height: 40%; background-size: contain; background-repeat: no-repeat;"></div>
     <div id="joyDiv" style="width:50%;">
         <canvas id="joystick" width="201px" height="200"></canvas>
     </div>
