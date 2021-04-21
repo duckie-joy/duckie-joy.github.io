@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+}
+
+.float-right{
+    position: fixed;
+    right: 40px;
+}
+
+.btn{
+    color: #FFF;
+    background-color: #0A9;
+    border-radius: 5px;
+    border-width: 0;
+    padding: 10px;
+    font-size: large;
+    box-shadow: 3px 3px 4px #999;
+}
+
+.btn-hover{
+    color: #EEE;
+    background-color: #099;
+    border-radius: 5px;
+    border-width: 0;
+    padding: 10px;
+    font-size: large;
+    box-shadow: 3px 3px 4px #DDD;
+}
+
+.btn-connected{
+    color: #AAA;
+    background-color: #070;
+    border-radius: 5px;
+    border-width: 0;
+    padding: 10px;
+    font-size: large;
+}
+
+.pointer {cursor: pointer;}
+
+.info {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    color: #FFF;
+}
