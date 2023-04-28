@@ -3,10 +3,13 @@ $(function () {
     const scene = new THREE.Scene();
     scene.add(new THREE.AmbientLight(0x3D4143, 0.1));
 
+    const container_w = 868;
+    const container_h = 600;
+
     // create camera
     const camera = new THREE.PerspectiveCamera(
         75,
-        window.innerWidth / window.innerHeight,
+        container_w / container_h,
         0.1,
         1000
     );
@@ -15,10 +18,10 @@ $(function () {
     // create renderer
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(
-        window.innerWidth,
-        window.innerHeight,
+        container_w,
+        container_h
     );
-    $('body').append(renderer.domElement);
+    $('#IMU-GAME').append(renderer.domElement);
 
     // physical world
     var world; 
@@ -139,8 +142,15 @@ $(function () {
     const max_y = 10;
 
     const ros_setup = function () {
-        let _robot_hostname = prompt("Duckiebot Hostname: ");
-        if (_robot_hostname == null) return;
+        let _passed_robot_name = $("#connect_to_duckiebot").html();
+
+        let _robot_hostname = null;
+        if (_passed_robot_name == null) {
+            _robot_hostname = prompt("Duckiebot Hostname: ");
+            if (_robot_hostname == null) return;
+        } else {
+            _robot_hostname = _passed_robot_name.trim().split("-")[2];
+        }
 
         ros = new ROSLIB.Ros({
             url: 'ws://' + _robot_hostname + '.local:9001'
@@ -149,7 +159,6 @@ $(function () {
         ros.on('connection', function () {
             console.log('Connected to websocket server.');
             survival_time_sec = 0;
-            $("#instruction").css("display", "none");
             $("#connect_to_duckiebot")
                 .prop("disabled", true)
                 .text("Connected to " + _robot_hostname)
@@ -225,7 +234,7 @@ $(function () {
     }, 1000);
 
     // link button actions
-    $("#connect_to_duckiebot").on("click", ros_setup);
+    $("#start_imu_game").on("click", ros_setup);
     $("#reset").on("click", () => {
         deinit();
         init();
